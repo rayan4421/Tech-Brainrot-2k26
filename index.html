@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Informations</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f3f3;
+}
+
+.container {
+  width: 360px;
+  margin: 60px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+input, textarea, select, button {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #f0f0f0;
+  resize: none;
+}
+
+textarea {
+  height: 110px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Informations</h2>
+
+  <form id="form">
+    <input type="text" name="pseudo" placeholder="Pseudo :" required>
+    <input type="text" name="brainrot" placeholder="Brainrot souhaitées" required>
+
+    <textarea name="message" placeholder="Nom Prénom !" required></textarea>
+
+    <input type="text" name="adresse" placeholder="Adresse" required>
+
+    <div class="row">
+      <input type="text" name="ville" placeholder="Ville" required>
+      <input type="text" name="code" placeholder="Code postal" required>
+    </div>
+
+    <select name="pays">
+      <option value="France">France</option>
+    </select>
+
+    <button type="submit">Envoyer</button>
+  </form>
+</div>
+
+<script>
+document.getElementById("form").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const data = {
+    pseudo: this.pseudo.value,
+    brainrot: this.brainrot.value,
+    message: this.message.value,
+    adresse: this.adresse.value,
+    ville: this.ville.value,
+    code: this.code.value,
+    pays: this.pays.value
+  };
+
+  fetch("WEBHOOK_URL_ICI", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      content: "Nouvelle soumission",
+      embeds: [{
+        title: "Informations reçues",
+        description:
+          "**Pseudo :** " + data.pseudo + "\n\n" +
+          "**Brainrot souhaitées :** " + data.brainrot + "\n\n" +
+          "**Nom Prénom :** " + data.message + "\n\n" +
+          "**Adresse :** " + data.adresse + "\n" +
+          "**Ville :** " + data.ville + "\n" +
+          "**Code postal :** " + data.code + "\n" +
+          "**Pays :** " + data.pays
+      }]
+    })
+  }).then(() => {
+    alert("Envoyé");
+    this.reset();
+  }).catch(() => {
+    alert("Erreur");
+  });
+});
+</script>
+
+</body>
+</html>
